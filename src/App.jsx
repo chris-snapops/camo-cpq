@@ -182,8 +182,8 @@ function CheckboxCard({
 
 function Summary({ product, addons }) {
   const total =
-    Number(product?.total_cost || 0) +
-    addons.reduce((s, a) => s + Number(a.total_cost || 0), 0);
+    Number(product?.unit_price || 0) +
+    addons.reduce((s, a) => s + Number(a.unit_price || 0), 0);
   return (
     <div className="w-full bg-white border-gray-200">
       <div className="mx-auto px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
@@ -353,7 +353,7 @@ export default function App() {
                             key={p.sku}
                             title={p.name}
                             description={p.description}
-                            price={p.total_cost}
+                            price={p.unit_price}
                             selected={productSku === p.sku}
                             onSelect={() => {
                               setProductSku(p.sku);
@@ -408,7 +408,7 @@ export default function App() {
                         key={a.sku}
                         title={a.name}
                         description={a.description}
-                        price={a.total_cost}
+                        price={a.unit_price}
                         checked={isChecked}
                         disabled={isDisabled}
                         onToggle={() => !isDisabled && toggleAddon(a.sku)}
