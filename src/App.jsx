@@ -327,14 +327,19 @@ export default function App() {
             {/* Product Picker (Accordion) */}
             <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
               <div className="p-4 border-b border-gray-100">
-                <h2 className="text-lg font-semibold">Choose a product</h2>
-                <p className="text-sm text-gray-500">
-                  Select one product to begin. Prices shown include install &
-                  shipping but exclude tax.
-                </p>
+                <div>
+                  <h2 className="text-lg font-semibold">Product</h2>
+                  <p className="text-sm text-gray-500 pb-4">
+                    Select one product to begin. Prices shown include install &
+                    shipping but exclude tax.
+                  </p>
+                </div>
+                <div className="text-sm text-gray-600 text-center">
+                  <span>{selectedProduct ? (selectedProduct.name) : ('\u00A0')}</span>
+                </div>
               </div>
 
-              <div className="p-4 space-y-3 max-h-[60vh] overflow-auto scroll-smooth">
+              <div className="p-4 space-y-3 h-[60vh] overflow-y-scroll scroll-smooth">
                 {productCategories.map((cat) => {
                   const items = products.filter((p) => p.category === cat);
                   if (items.length === 0) return null;
@@ -370,14 +375,14 @@ export default function App() {
 
             {/* Add-on Picker */}
             <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
-              <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+              <div className="p-4 border-b border-gray-100">
                 <div>
                   <h2 className="text-lg font-semibold">Add-ons</h2>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 pb-4">
                     Only add-ons compatible with the selected product are shown.
                   </p>
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600 text-center">
                   {selectedProduct ? (
                     <span>{selectedProduct.name}</span>
                   ) : (
@@ -386,7 +391,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="p-4 space-y-3 max-h-[60vh] overflow-auto scroll-smooth">
+              <div className="p-4 space-y-3 h-[60vh] overflow-y-scroll scroll-smooth">
                 {!selectedProduct && (
                   <div className="text-sm text-gray-500">
                     Choose a product to see available add-ons.
