@@ -137,7 +137,11 @@
                 "bruno--CRE-2110E-outdoor-turn-custom"
             ],
             "incompatible_skus": [
-                "bruno--power-swivel"
+                "bruno--power-swivel",
+                "bruno--vinyl-upholstery-charcoal",
+                "bruno--vinyl-upholstery-espresso",
+                "bruno--vinyl-upholstery-cream",
+                "bruno--vinyl-upholstery-white"
             ]
         },
         "bruno--larger-wider-footrest": {

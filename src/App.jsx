@@ -54,16 +54,18 @@ function useProducts() {
 
 function Header() {
   return (
-    <header className="sticky top-0 z-20 bg-gray-50/80 backdrop-blur border-b border-gray-200">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-        <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">
-          Camo CPQ
-        </h1>
-        <div className="text-xs sm:text-sm text-gray-500">
-          Demo • local <code>/items/products.json</code>
+    <div className="px-4">
+      <header className="sticky top-0 z-20 bg-gray-50/80 backdrop-blur border-b border-gray-200">
+        <div className="mx-auto px-4 py-3 flex items-center justify-between">
+          <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">
+            Camo CPQ
+          </h1>
+          <div className="text-xs sm:text-sm text-gray-500">
+            Demo • local <code>/items/products.json</code>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </div>
   );
 }
 
@@ -184,7 +186,7 @@ function Summary({ product, addons }) {
     addons.reduce((s, a) => s + Number(a.total_cost || 0), 0);
   return (
     <div className="w-full bg-white border-gray-200">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+      <div className="mx-auto px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
         <div className="text-sm text-gray-500">
           <span className="font-medium text-gray-700">Summary:</span>
           {product ? (
@@ -314,7 +316,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="mx-auto max-w-6xl w-full px-4 py-6 space-y-8">
+      <main className="mx-auto w-full px-4 py-6 space-y-6">
         {loading && (
           <div className="text-center text-gray-600">Loading products…</div>
         )}
@@ -428,14 +430,15 @@ export default function App() {
             </section>
           </div>
         )}
-        <div className="sticky bottom-0 z-30">
-          <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
-            <div className="p-4 border-gray-100">
-              <Summary product={selectedProduct} addons={selectedAddons} />
-            </div>
-          </section>
-        </div>
       </main>
+
+      <div className="sticky bottom-0 z-30 px-4">
+        <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+          <div className="p-1 border-gray-100">
+            <Summary product={selectedProduct} addons={selectedAddons} />
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

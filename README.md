@@ -1,12 +1,24 @@
-# React + Vite
+# Camo CPQ Webapp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a pricing calculator for that works offline and integrates with HubSpot.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- grab the products from hubspot
+- differentiate between products & add-ons
+- know which products can go with which add-ons
+- product picker
+  - show products & their costs
+  - show available add-ons & their costs
+  - don't show sku on frontend
+  - show name in black with description in smaller gray underneath
+  - can only choose 1 product
+- add-on picker
+  - all the same as above, only show ones with compatible parent skus
+  - can choose multiple add-ons.  once an addon is chosen, grey out the ones with incompatible skus
+  - only show add-ons that have the parent sku of the product
 
-## Expanding the ESLint configuration
+- this has to work well on an ipad and/or on a phone.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+*Created Aug 2025 by Chris Becher (chris.becher@profitpad.com) on behalf of ProfitPad for Camo*
+*Site hosted at https://app.netlify.com/projects/camo-cpq/overview*

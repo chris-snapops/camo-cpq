@@ -4,7 +4,7 @@ const CACHE_NAME = "cpq-cache-v3";
 const PRECACHE_URLS = [
   "/",              // SPA shell
   "/index.html",
-  "/favicon.svg",   // your favicon in /public
+  "/favicon-32x32.png",   // your favicon in /public
   "/items/products.json", // your data file in /public/items
 ];
 
