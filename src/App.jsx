@@ -327,16 +327,11 @@ export default function App() {
             {/* Product Picker (Accordion) */}
             <section className="bg-white rounded-2xl border border-gray-200 shadow-sm pb-2">
               <div className="p-4 border-b border-gray-100">
-                <div>
-                  <h2 className="text-lg font-semibold">Product</h2>
-                  <p className="text-sm text-gray-500 pb-4">
-                    Select one product to begin. Prices shown include install &
-                    shipping but exclude tax.
-                  </p>
-                </div>
-                <div className="text-sm text-gray-600 text-center">
-                  <span>{selectedProduct ? (selectedProduct.name) : ('\u00A0')}</span>
-                </div>
+                <h2 className="text-lg font-semibold">Product</h2>
+                <p className="text-sm text-gray-500 pb-4">
+                  Select one product to begin. Prices shown include install &
+                  shipping but exclude tax.
+                </p>
               </div>
 
               <div className="p-4 space-y-3 h-[60vh] overflow-y-scroll scroll-smooth">
@@ -376,19 +371,10 @@ export default function App() {
             {/* Add-on Picker */}
             <section className="bg-white rounded-2xl border border-gray-200 shadow-sm pb-2">
               <div className="p-4 border-b border-gray-100">
-                <div>
-                  <h2 className="text-lg font-semibold">Add-ons</h2>
-                  <p className="text-sm text-gray-500 pb-4">
-                    Only add-ons compatible with the selected product are shown.
-                  </p>
-                </div>
-                <div className="text-sm text-gray-600 text-center">
-                  {selectedProduct ? (
-                    <span>{selectedProduct.name}</span>
-                  ) : (
-                    <span className="italic">Select a product first</span>
-                  )}
-                </div>
+                <h2 className="text-lg font-semibold">Add-ons</h2>
+                <p className="text-sm text-gray-500 pb-4">
+                  Only add-ons compatible with the selected product are shown.
+                </p>
               </div>
 
               <div className="p-4 space-y-3 h-[60vh] overflow-y-scroll scroll-smooth">
@@ -420,29 +406,29 @@ export default function App() {
                       />
                     );
                   })}
-              </div>
 
-              {selectedProduct && selectedAddons.length > 0 && (
-                <div className="px-4 pb-4">
-                  <button
-                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm"
-                    onClick={() => setAddonSkus(new Set())}
-                  >
-                    Clear add-ons
-                  </button>
-                </div>
-              )}
+                {selectedProduct && selectedAddons.length > 0 && (
+                  <div className="sticky bottom-0 pt-2 z-30 flex justify-end">
+                    <button
+                      className="sm:w-auto px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm"
+                      onClick={() => setAddonSkus(new Set())}
+                    >
+                      Clear add-ons
+                    </button>
+                  </div>
+                )}
+              </div>
             </section>
           </div>
         )}
       </main>
 
       <div className="sticky bottom-0 z-30 p-4">
-        <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
           <div className="p-1 border-gray-100">
             <Summary product={selectedProduct} addons={selectedAddons} />
           </div>
-        </section>
+        </div>
       </div>
     </div>
   );
