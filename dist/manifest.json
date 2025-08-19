@@ -1,15 +1,15 @@
 {
-    "name": "Camo CPQ",
+    "name": "CPQ App",
     "short_name": "CPQ",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#007bff",
+    "background_color": "#69b9d1",
+    "theme_color": "#69b9d1",
     "icons": [
         {
-            "src": "/favicon-32x32.png",
-            "sizes": "32x32",
-            "type": "image/png"
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
         }
     ]
 }
