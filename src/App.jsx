@@ -316,7 +316,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="mx-auto w-full px-4 py-6 space-y-6">
+      <main className="mx-auto w-full px-4 py-4 space-y-6">
         {loading && (
           <div className="text-center text-gray-600">Loading products…</div>
         )}
@@ -325,7 +325,7 @@ export default function App() {
         {!loading && !error && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Product Picker (Accordion) */}
-            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm pb-2">
               <div className="p-4 border-b border-gray-100">
                 <div>
                   <h2 className="text-lg font-semibold">Product</h2>
@@ -374,7 +374,7 @@ export default function App() {
             </section>
 
             {/* Add-on Picker */}
-            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm pb-2">
               <div className="p-4 border-b border-gray-100">
                 <div>
                   <h2 className="text-lg font-semibold">Add-ons</h2>
@@ -437,7 +437,7 @@ export default function App() {
         )}
       </main>
 
-      <div className="sticky bottom-0 z-30 px-4">
+      <div className="sticky bottom-0 z-30 p-4">
         <section className="bg-white rounded-2xl border border-gray-200 shadow-sm">
           <div className="p-1 border-gray-100">
             <Summary product={selectedProduct} addons={selectedAddons} />
