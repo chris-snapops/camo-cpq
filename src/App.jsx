@@ -328,7 +328,7 @@ export default function App() {
             <section className="bg-white rounded-2xl border border-gray-200 shadow-sm pb-2">
               <div className="p-4 border-b border-gray-100">
                 <h2 className="text-lg font-semibold">Product</h2>
-                <p className="text-sm text-gray-500 pb-4">
+                <p className="text-sm text-gray-500">
                   Select one product to begin. Prices shown include install &
                   shipping but exclude tax.
                 </p>
@@ -369,15 +369,15 @@ export default function App() {
             </section>
 
             {/* Add-on Picker */}
-            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm pb-2">
+            <section className="bg-white rounded-2xl border border-gray-200 shadow-sm pb-2 ">
               <div className="p-4 border-b border-gray-100">
                 <h2 className="text-lg font-semibold">Add-ons</h2>
-                <p className="text-sm text-gray-500 pb-4">
+                <p className="text-sm text-gray-500">
                   Only add-ons compatible with the selected product are shown.
                 </p>
               </div>
 
-              <div className="p-4 space-y-3 h-[60vh] overflow-y-scroll scroll-smooth">
+              <div className="p-4 space-y-3 h-[60vh] overflow-y-scroll scroll-smooth flex flex-col">
                 {!selectedProduct && (
                   <div className="text-sm text-gray-500">
                     Choose a product to see available add-ons.
@@ -408,7 +408,7 @@ export default function App() {
                   })}
 
                 {selectedProduct && selectedAddons.length > 0 && (
-                  <div className="sticky bottom-0 pt-2 z-30 flex justify-end">
+                  <div className="sticky bottom-0 pt-2 z-30 flex justify-end mt-auto">
                     <button
                       className="sm:w-auto px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm"
                       onClick={() => setAddonSkus(new Set())}
