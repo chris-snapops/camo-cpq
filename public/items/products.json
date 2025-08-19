@@ -198,6 +198,7 @@
                 "bruno--CRE-2110-indoor-turn-custom"
             ],
             "incompatible_skus": [
+                "bruno--larger-seat",
                 "bruno--vinyl-upholstery-espresso",
                 "bruno--vinyl-upholstery-cream",
                 "bruno--vinyl-upholstery-white"
@@ -219,6 +220,7 @@
                 "bruno--CRE-2110-indoor-turn-custom"
             ],
             "incompatible_skus": [
+                "bruno--larger-seat",
                 "bruno--vinyl-upholstery-charcoal",
                 "bruno--vinyl-upholstery-cream",
                 "bruno--vinyl-upholstery-white"
@@ -240,6 +242,7 @@
                 "bruno--CRE-2110-indoor-turn-custom"
             ],
             "incompatible_skus": [
+                "bruno--larger-seat",
                 "bruno--vinyl-upholstery-charcoal",
                 "bruno--vinyl-upholstery-espresso",
                 "bruno--vinyl-upholstery-white"
@@ -261,6 +264,7 @@
                 "bruno--CRE-2110-indoor-turn-custom"
             ],
             "incompatible_skus": [
+                "bruno--larger-seat",
                 "bruno--vinyl-upholstery-charcoal",
                 "bruno--vinyl-upholstery-espresso",
                 "bruno--vinyl-upholstery-cream"
