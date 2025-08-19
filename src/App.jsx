@@ -214,11 +214,11 @@ function Summary({ product, addons }) {
 
 function AccordionSection({ title, count, isOpen, onToggle, children }) {
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden">
+    <div>
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100"
+        className="w-full rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100"
       >
         <span className="text-sm font-medium text-gray-900">{title}</span>
         <div className="flex items-center gap-3">
@@ -227,7 +227,7 @@ function AccordionSection({ title, count, isOpen, onToggle, children }) {
           </span>
           <svg
             className={classNames(
-              "h-4 w-4 text-gray-500 transition-transform",
+              "h-4 w-4 text-gray-500 transition-transform duration-300",
               isOpen ? "rotate-180" : "",
             )}
             viewBox="0 0 20 20"
