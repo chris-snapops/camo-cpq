@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import Papa from 'papaparse'
 
 function classNames(...arr) {
   return arr.filter(Boolean).join(" ");
@@ -8,21 +9,114 @@ const currency = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
-function useProducts() {
+// --- constants ---
+const sheetId = "14zzAWJNgDxZgXAm713sq3K8fhWDNJPZ49SGYssBQH00";
+const sheetGids = {
+  categories: 512714440,
+  products: 1610198502,
+  addons: 1688740072,
+};
+
+// --- helpers ---
+function priceStringToFloat(s) {
+  if (!s) return 0;
+  return parseFloat(s.replace(/[^\d.]/g, "")) || 0;
+}
+
+async function getSheet(sheetId, gid) {
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=${gid}`;
+  const res = await fetch(url);
+  if (!res.ok) return { cols: {}, rows: [] };
+
+  const text = await res.text();
+  const { data } = Papa.parse(text, {
+    header: true,
+    skipEmptyLines: true,
+  });
+
+  const rows = data.map((row) => {
+    // normalize empty strings
+    const cleanRow = {};
+    Object.entries(row).forEach(([k, v]) => {
+      cleanRow[k.trim()] = v?.trim() || "";
+    });
+    return cleanRow;
+  });
+
+  const cols = {};
+  rows.forEach((row) => {
+    Object.entries(row).forEach(([k, v]) => {
+      if (!v) return;
+      if (!cols[k]) cols[k] = [];
+      cols[k].push(v);
+    });
+  });
+
+  return { cols, rows };
+}
+
+async function loadProductsFromSheets() {
+  const retJson = {
+    products: {},
+    addons: {},
+    productCategories: [],
+    addonCategories: [],
+  };
+
+  // Categories
+  const categoriesSheet = await getSheet(sheetId, sheetGids.categories);
+  retJson["productCategories"] =
+    categoriesSheet.cols["Product Categories"] || [];
+  retJson["addonCategories"] = categoriesSheet.cols["Add-on Categories"] || [];
+
+  // Products
+  const productsSheet = await getSheet(sheetId, sheetGids.products);
+  productsSheet.rows.forEach((row) => {
+    retJson.products[row["Product SKU"]] = {
+      category: row["Product Category"],
+      manufacturer: row["Manufacturer"],
+      sku: row["Product SKU"],
+      name: row["Product Name"],
+      description: row["Product Description"],
+      unit_price: priceStringToFloat(row["Our Price"]),
+    };
+  });
+
+  // Add-ons
+  const addonsSheet = await getSheet(sheetId, sheetGids["addons"]);
+  addonsSheet.rows.forEach((row) => {
+    retJson.addons[row["Add-on SKU"]] = {
+      category: row["Add-on Category"],
+      manufacturer: row["Manufacturer"],
+      sku: row["Add-on SKU"],
+      name: row["Add-on Name"],
+      description: row["Add-on Description"],
+      unit_price: priceStringToFloat(row["Our Price"]),
+      parent_skus:
+        row["Compatible Parent SKUs"]?.replace(/\s+/g, "").split(",") || [],
+      incompatible_skus:
+        row["Incompatible Add-on SKUs"]?.replace(/\s+/g, "").split(",") || [],
+    };
+  });
+
+  console.log(retJson);
+  return retJson;
+}
+
+// --- Hook (integrates with your app) ---
+export function useProducts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState({
     products: {},
     addons: {},
-    "product-categories": [],
+    productCategories: [],
   });
 
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/items/products.json", { cache: "no-store" });
-        if (!res.ok) throw new Error("Failed to load products.json");
-        const json = await res.json();
+        const json = await loadProductsFromSheets();
         setData(json);
       } catch (e) {
         setError(e.message || String(e));
@@ -35,21 +129,23 @@ function useProducts() {
 
   const products = useMemo(() => Object.values(data.products || {}), [data]);
   const addons = useMemo(() => Object.values(data.addons || {}), [data]);
-  const categoriesFromData = useMemo(
-    () => data["product-categories"] || [],
+  const productCategories = useMemo(
+    () => Object.values(data.productCategories || []),
+    [data],
+  );
+  const addonCategories = useMemo(
+    () => Object.values(data.addonCategories || []),
     [data],
   );
 
-  // Fallback: if "product-categories" missing, build from product.category
-  const productCategories = useMemo(() => {
-    if (Array.isArray(categoriesFromData) && categoriesFromData.length > 0) {
-      return categoriesFromData;
-    }
-    const set = new Set(products.map((p) => p.category).filter(Boolean));
-    return Array.from(set);
-  }, [categoriesFromData, products]);
-
-  return { loading, error, products, addons, productCategories };
+  return {
+    loading,
+    error,
+    products,
+    addons,
+    productCategories,
+    addonCategories,
+  };
 }
 
 function Header() {
@@ -60,8 +156,8 @@ function Header() {
           <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">
             Camo CPQ
           </h1>
-          <div className="text-xs sm:text-sm text-gray-500">
-            Demo • local <code>/items/products.json</code>
+          <div className="text-xs sm:text-sm">
+            Demo • Source: <a className="text-blue-600 hover:text-blue-800 underline" href="https://docs.google.com/spreadsheets/d/14zzAWJNgDxZgXAm713sq3K8fhWDNJPZ49SGYssBQH00/edit" target="_blank">Camo CPQ Products</a>
           </div>
         </div>
       </header>
@@ -241,23 +337,24 @@ function AccordionSection({ title, count, isOpen, onToggle, children }) {
           </svg>
         </div>
       </button>
-      {isOpen && <div className="p-3 space-y-3 bg-white">{children}</div>}
+      {isOpen && <div className="p-3">{children}</div>}
     </div>
   );
 }
 
 export default function App() {
-  const { loading, error, products, addons, productCategories } = useProducts();
+  const {
+    loading,
+    error,
+    products,
+    addons,
+    productCategories,
+    addonCategories,
+  } = useProducts();
   const [productSku, setProductSku] = useState(null);
   const [addonSkus, setAddonSkus] = useState(new Set());
-  const [openCat, setOpenCat] = useState(null); // single-open accordion
-
-  // open first category by default
-  useEffect(() => {
-    if (productCategories.length > 0 && !openCat) {
-      setOpenCat(productCategories[0]);
-    }
-  }, [productCategories, openCat]);
+  const [openProductCat, setOpenProductCat] = useState(null); // product accordion
+  const [openAddonCat, setOpenAddonCat] = useState(null); // addon accordion
 
   const selectedProduct = useMemo(
     () => products.find((p) => p.sku === productSku) || null,
@@ -308,10 +405,6 @@ export default function App() {
     [addons, addonSkus],
   );
 
-  const toggleCategory = (cat) => {
-    setOpenCat((prev) => (prev === cat ? null : cat));
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -338,14 +431,16 @@ export default function App() {
                 {productCategories.map((cat) => {
                   const items = products.filter((p) => p.category === cat);
                   if (items.length === 0) return null;
-                  const isOpen = openCat === cat;
+                  const isOpen = openProductCat === cat;
                   return (
                     <AccordionSection
                       key={cat}
                       title={cat}
                       count={items.length}
                       isOpen={isOpen}
-                      onToggle={() => toggleCategory(cat)}
+                      onToggle={() =>
+                        setOpenProductCat((prev) => (prev === cat ? null : cat))
+                      }
                     >
                       <div className="space-y-3">
                         {items.map((p) => (
@@ -357,7 +452,7 @@ export default function App() {
                             selected={productSku === p.sku}
                             onSelect={() => {
                               setProductSku(p.sku);
-                              setOpenCat(cat); // open the clicked product's category when selecting
+                              setOpenProductCat(cat); // open the clicked product's category
                             }}
                           />
                         ))}
@@ -390,20 +485,44 @@ export default function App() {
                 )}
 
                 {selectedProduct &&
-                  productScopedAddons.map((a) => {
-                    const isChecked = addonSkus.has(a.sku);
-                    const isDisabled =
-                      !isChecked && incompatibleSkuSet.has(a.sku);
+                  addonCategories.map((cat) => {
+                    const items = productScopedAddons.filter(
+                      (a) => a.category === cat,
+                    );
+                    console.log(addonCategories);
+                    if (items.length === 0) return null;
+                    const isOpen = openAddonCat === cat;
                     return (
-                      <CheckboxCard
-                        key={a.sku}
-                        title={a.name}
-                        description={a.description}
-                        price={a.unit_price}
-                        checked={isChecked}
-                        disabled={isDisabled}
-                        onToggle={() => !isDisabled && toggleAddon(a.sku)}
-                      />
+                      <AccordionSection
+                        key={cat}
+                        title={cat}
+                        count={items.length}
+                        isOpen={isOpen}
+                        onToggle={() =>
+                          setOpenAddonCat((prev) => (prev === cat ? null : cat))
+                        }
+                      >
+                        <div className="space-y-3">
+                          {items.map((a) => {
+                            const isChecked = addonSkus.has(a.sku);
+                            const isDisabled =
+                              !isChecked && incompatibleSkuSet.has(a.sku);
+                            return (
+                              <CheckboxCard
+                                key={a.sku}
+                                title={a.name}
+                                description={a.description}
+                                price={a.unit_price}
+                                checked={isChecked}
+                                disabled={isDisabled}
+                                onToggle={() =>
+                                  !isDisabled && toggleAddon(a.sku)
+                                }
+                              />
+                            );
+                          })}
+                        </div>
+                      </AccordionSection>
                     );
                   })}
 

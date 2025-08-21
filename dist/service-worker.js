@@ -4,8 +4,10 @@ const CACHE_NAME = "cpq-cache-v3";
 const PRECACHE_URLS = [
   "/",              // SPA shell
   "/index.html",
-  "/favicon-32x32.png",   // your favicon in /public
-  "/items/products.json", // your data file in /public/items
+  "/favicon-32x32.png",
+  "https://docs.google.com/spreadsheets/d/14zzAWJNgDxZgXAm713sq3K8fhWDNJPZ49SGYssBQH00/gviz/tq?tqx=out:csv&gid=512714440",
+  "https://docs.google.com/spreadsheets/d/14zzAWJNgDxZgXAm713sq3K8fhWDNJPZ49SGYssBQH00/gviz/tq?tqx=out:csv&gid=1610198502",
+  "https://docs.google.com/spreadsheets/d/14zzAWJNgDxZgXAm713sq3K8fhWDNJPZ49SGYssBQH00/gviz/tq?tqx=out:csv&gid=1688740072",
 ];
 
 // Install: pre-cache stable assets
@@ -45,7 +47,7 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
 
   // Only handle same-origin (skip CDNs like unpkg/cdn.tailwindcss)
-  if (!isSameOrigin(request.url)) return;
+//   if (!isSameOrigin(request.url)) return;
 
   event.respondWith(
     (async () => {
